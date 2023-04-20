@@ -8,7 +8,12 @@ public class OpossumMove : Enemy
     public Transform LeftPoint, RightPoint;
     private float LeftPosition, RightPosition;
     private bool isFaceLeft = true;
-    private float Speed = 3;
+    private float Speed = 1F;
+
+
+    GameObject PlayerHead;
+    private float R = 4;
+    private float distance;
 
     protected override void Start()
     {
@@ -18,11 +23,46 @@ public class OpossumMove : Enemy
         RightPosition = RightPoint.position.x;
         Destroy(LeftPoint.gameObject);
         Destroy(RightPoint.gameObject);
+        PlayerHead = GameObject.Find("PlayerHead");
     }
 
     void Update()
     {
         MoveMent();
+
+        if (Mathf.Abs(transform.position.y - PlayerHead.transform.position.y) <= 0.5f)
+        {
+            distance = transform.position.x - PlayerHead.transform.position.x;
+            if (distance <= R)
+                MoveToPlayer();
+        }
+        else
+        {
+            MoveMent();
+        }
+    }
+    private void MoveToPlayer()
+    {
+        Debug.Log("！靠近敌人");
+        if (transform.position.x - PlayerHead.transform.position.x > 0)  //敌人在右边  me   敌
+        {
+
+            if (!isFaceLeft)
+            {
+                this.transform.localScale = new Vector3(1, 1, 1);
+                isFaceLeft = true;
+            }
+            opossum.velocity = new Vector2(-Speed * 3, opossum.velocity.y);
+        }
+        else     //敌人   me
+        {
+            if (isFaceLeft)
+            {
+                isFaceLeft = false;
+                this.transform.localScale = new Vector3(-1, 1, 1);
+            }
+            opossum.velocity = new Vector2(Speed * 3, opossum.velocity.y);
+        }
     }
 
     private void MoveMent()

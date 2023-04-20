@@ -24,4 +24,13 @@ public class Enemy : MonoBehaviour
     {
         Destroy(anim.gameObject);
     }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Bomb")
+        {
+            Death();
+            DeathAnim();
+        }
+    }
 }

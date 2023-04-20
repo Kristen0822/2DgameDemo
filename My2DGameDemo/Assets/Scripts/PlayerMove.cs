@@ -28,6 +28,7 @@ public class PlayerMove : MonoBehaviour
     private bool isGround;//是否在地面上
     private bool CanDoubleJump = true;//是否可以二段跳
     private bool isInLadder = false;//是否在爬梯子
+    private bool isHaveBomb = false;//是否捡到炸弹
 
     void Start()
     {
@@ -51,12 +52,14 @@ public class PlayerMove : MonoBehaviour
         if (!isHurt)
             Movement();
         ExchangeAnim();
-        if (!isDeathing)
-            PlayerDeath();
+        //if (!isDeathing)
+        //    PlayerDeath();
         Collect();
         isGround = Physics2D.OverlapCircle(PlayerBottom.position, 0.1f, Ground);
         //IsPressJumpKey();
         Climb();
+
+
     }
 
     //角色移动
@@ -180,9 +183,10 @@ public class PlayerMove : MonoBehaviour
         if (CollectionIndex == 1)
         {
             AudioManager.instance.CollectAudioSource();
+            isHaveBomb = true;
             //CollectAudio.Play();
-            Count++;
-            Score.text = Count.ToString();
+            //发消息给炸弹 显示UI 
+            ActionManager.BombAction.Invoke(isHaveBomb);
         }
         else if (CollectionIndex == 2)
         {
@@ -200,16 +204,11 @@ public class PlayerMove : MonoBehaviour
     {
         if (collision.gameObject.tag == "Enemy")
         {
-            /*
-            ? 这里的 GetComponent<Enemy>() 让我有点疑惑，应该是我对这个 GetComponent 方法的理解产生了偏差，但是我现在想了很久也不明白为什么
-            等到时候学了泛型的时候再回来看一下吧。现在就姑且理解为现在这个 collision 对象的 Enemy 组件，然后调用Enemy组件内部的方法(Enemy明明应该是其父类
-            ，就像Transform这些类一样，但是每次都可以在这个对象里面拿到父类的东西，难道这就是泛型的作用吗?)
-                                                                                                            2022-04-19
-            */
             Enemy enemy = collision.gameObject.GetComponent<Enemy>();
             if (anim.GetBool("Fall"))
             {
-                enemy.Death();
+
+                //enemy.Death();
                 rb.velocity = new Vector2(rb.velocity.x, JumpForce - 1);
                 anim.SetBool("Jump", true);
                 anim.SetBool("Fall", false);
@@ -234,15 +233,18 @@ public class PlayerMove : MonoBehaviour
                 {
                     rb.velocity = new Vector2(3, rb.velocity.y + 0.5f);
                 }
+
             }
+
+            PlayerDeath();
         }
     }
     
     //角色死亡
     private void PlayerDeath()
     {
-        if (this.transform.position.y <= DeathLine_y)
-        {
+        //if (this.transform.position.y <= DeathLine_y)
+        //{
             isDeathing = true;
             anim.SetTrigger("Death");
             //GetComponent<AudioSource>().enabled = false;
@@ -255,7 +257,7 @@ public class PlayerMove : MonoBehaviour
             FinalScore.text = Count.ToString();
             Invoke("ReStart", 3.5f);
             MaxScore();
-        }
+       // }
     }
 
     //角色死亡后的最大分数
