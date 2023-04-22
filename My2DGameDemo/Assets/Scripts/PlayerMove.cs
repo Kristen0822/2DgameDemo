@@ -80,13 +80,6 @@ public class PlayerMove : MonoBehaviour
         }
         //角色跳跃
         PlayerJump();
-        /*if (Input.GetButtonDown("Jump") && Coll.IsTouchingLayers(Ground))
-          {
-              rb.velocity = new Vector2(rb.velocity.x, JumpForce);
-              //JumpAudio.Play();
-              AudioManager.instance.JumpAudioSource();
-              anim.SetBool("Jump", true);
-          }*/
         Crouch();
     }
 
@@ -207,25 +200,15 @@ public class PlayerMove : MonoBehaviour
             Enemy enemy = collision.gameObject.GetComponent<Enemy>();
             if (anim.GetBool("Fall"))
             {
-
-                //enemy.Death();
                 rb.velocity = new Vector2(rb.velocity.x, JumpForce - 1);
                 anim.SetBool("Jump", true);
                 anim.SetBool("Fall", false);
-                Count += 3;
-                Score.text = Count.ToString();
             }
             else
             {
                 isHurt = true;
-                //碰到敌人时扣分
-                if (Count >= 1)
-                {
-                    Count -= 1;
-                    Score.text = Count.ToString();
-                }
                 //受伤反弹
-                if(this.transform.position.x < collision.gameObject.transform.position.x)
+                if (this.transform.position.x < collision.gameObject.transform.position.x)
                 {
                     rb.velocity = new Vector2(-3, rb.velocity.y + 0.5f);
                 }

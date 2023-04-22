@@ -30,9 +30,9 @@ public class OpossumMove : Enemy
     {
         MoveMent();
 
-        if (Mathf.Abs(transform.position.y - PlayerHead.transform.position.y) <= 0.5f)
+        if (Mathf.Abs(transform.position.y - PlayerHead.transform.position.y)<= 0.5f)
         {
-            distance = transform.position.x - PlayerHead.transform.position.x;
+            distance = Mathf.Abs(transform.position.x - PlayerHead.transform.position.x);
             if (distance <= R)
                 MoveToPlayer();
         }
@@ -43,10 +43,9 @@ public class OpossumMove : Enemy
     }
     private void MoveToPlayer()
     {
-        Debug.Log("！靠近敌人");
+        Debug.Log("！靠近敌人"  );
         if (transform.position.x - PlayerHead.transform.position.x > 0)  //敌人在右边  me   敌
         {
-
             if (!isFaceLeft)
             {
                 this.transform.localScale = new Vector3(1, 1, 1);

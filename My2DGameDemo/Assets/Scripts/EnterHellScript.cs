@@ -6,8 +6,7 @@ using UnityEngine.SceneManagement;
 public class EnterHellScript : MonoBehaviour
 {
     public GameObject EnterEDialog;
-    //因为OnTriggerEnter2D只能在一瞬间，所以再写一个函数实现现在的功能
-    //用Player是否在这里来实现场景转换
+
     private bool PlayerIsHere = false;
     private PlayerMove Player;
     private void Update()

@@ -72,6 +72,7 @@ public class SwitchScene : MonoBehaviour
     {
         PausePanel.SetActive(false);
         SureToExitPanel.SetActive(true);
+        
     }
     //不确定退出
     public void NotSureButton()
@@ -82,8 +83,9 @@ public class SwitchScene : MonoBehaviour
     //返回主菜单
     public void BackToMainMenu()
     {
-        Time.timeScale = 1;
-        SceneManager.LoadScene("Menu");
+        //Time.timeScale = 1;
+        //SceneManager.LoadScene("Menu");
+        Application.Quit();
     }
     //游戏音量调整
     public void SetVolume(float volume)
